@@ -1,52 +1,17 @@
-var xhr = new XMLHttpRequest();
-var url = 'health_article.json';
-xhr.open('GET', url, true);
-xhr.responseType = 'json';
+function showWheaterDetails(event) {
+    event.preventDefault();
+    const city = document.getElementById('city').value;
+const apiKey = `245b2cdfdbe3aa4dfa4daa2471ebc421`;
+const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}`;
 
-xhr.onload = function() {
-    var articles = xhr.response.articles;
-    var articlesDiv = document.getElementById('articles');
+fetch(apiUrl)
+    .then(Response => Response.json())
+    .then(data => {
+        const wheaterInfo = document.getElementById('wheaterInfo');
+        wheaterInfo.innerHTML = `<h>Wheater in ${data.name}</h>
+                                 <p>Temperature: ${data.main.temp} &#8451;</p>
+                                 <p>Wheater: ${data.wtheater[0].description}</p>`;
+    });
 }
 
-articles.forEach(function(article) {
-    var articlesDiv = document.createElement('div');
-    articlesDiv.classList.add('article');
-
-    var title = document.createElement('h2');
-    title.textContent = article.title;
-
-    var description = document.createElement('p');
-    description.textContent = article.description;
-
-    var waysHeader = document.createElement('h3');
-    waysHeader.textContent = 'Ways to Achieve';
-
-    var waysList = document.createElement('ul');
-    article.ways_to_achieve.forEach(function(way) {
-        var listItem = document.create('li');
-        listItem.textContent = way;
-        waysList.appendChild(listItem);
-    });
-
-    var benefitsHeader = document.createElement('h3');
-    benefitsHeader.textContent = 'Benefits:';
-
-    var benefitsList = document.createElement('ul');
-    article.benefits.forEach(function(benefit) {
-        var listItem = document.createElement('li');
-        listItem.textContent = benefit;
-        benefitsList.appendChild(listItem);
-    });
-
-    articlesDiv.appendChild(title);
-      articlesDiv.appendChild(description);
-      articlesDiv.appendChild(waysHeader);
-      articlesDiv.appendChild(waysList);
-      articlesDiv.appendChild(benefitsHeader);
-      articlesDiv.appendChild(benefitsList);
-      articlesDiv.appendChild(articlesDiv);
-    
-});
-
-xhr.send();
-
+document.getElementById('weatherForm').addEventListener('submit', showWheaterDetails);
